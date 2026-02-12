@@ -12,6 +12,17 @@ jobs:
 
     #### Добавьте шаг с Flyway-миграциями
 
+    - name: Install flyway
+      run: |
+        pwd
+        docker run --rm \
+          -v $(pwd)/migrations:/flyway/sql \
+          flyway/flyway:latest-alpine \
+          migrate \
+          -url="jdbc:postgresql://${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_NAME }}" \
+          -user="${{ secrets.DB_USER }}" \
+          -password="${{ secrets.DB_PASSWORD }}"
+
     ### Этот шаг оставьте без изменений
     - name: Download and setup autotests binaries
       run: |
